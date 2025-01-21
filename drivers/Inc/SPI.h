@@ -139,6 +139,14 @@
 #define SR_TXE								1
 #define SR_RXNE								0
 /************************ typedef *************************/
+/************ SPI States **************************/
+typedef enum
+{
+	SPI_READY			= 	0x00,
+	SPI_BUSY_IN_RX		=	0x01,
+	SPI_BUSY_IN_TX		=	0x02
+}SPI_States_e;
+
 /**
  * Configuration structure for SPIx peripheral
  */
@@ -172,9 +180,10 @@ typedef struct
 
 	uint32_t		RxLen;		//Store the Length of the data to be received
 
-	uint8_t			TxState;	//Store Tx state. Possible values from SPI States
+	SPI_States_e	TxState;	//Store Tx state. Possible values from SPI States
 
-	uint8_t			RxState;	//Store Rx State. Possible values from SPI States
+	SPI_States_e	RxState;	//Store Rx State. Possible values from SPI States
+
 }SPI_Handle_t;
 
 /************ SPI Flags Enum Definition ******************/
@@ -189,13 +198,6 @@ typedef enum
 	SPI_ERRIE_FLAG
 }SPI_Flag_e;
 
-/************ SPI States **************************/
-typedef enum
-{
-	SPI_READY			= 	0x00,
-	SPI_BUSY_IN_RX		=	0x01,
-	SPI_BUSY_IN_TX		=	0x02
-}SPI_States_e;
 /************************ Function Declaration *************************/
 
 /*
@@ -231,6 +233,10 @@ void SPI_IRQPriorityConfig(uint8_t IRQNumber, uint32_t PiIRQPriority);
 void SPI_IRQHandler(SPI_Handle_t *pSPIHandle);
 
 uint8_t SPI_GetFlagStatus(SPI_Handle_t *pSPIHandle, SPI_Flag_e flagName);
+
+void SPI_TXInterruptHandle(SPI_Handle_t *pSPIHandle);
+
+void SPI_RXInterruptHandle(SPI_Handle_t *pSPIHandle);
 
 __weak void SPI_ApplicationEventCallback(SPI_Handle_t *pSPIHandle,uint8_t AppEv);
 

@@ -219,6 +219,14 @@ void SPI_ReceiveData(SPI_Handle_t *pSPIHandle,uint8_t *pRxBuffer, uint32_t dataL
 	SPI_DISABLE(pSPIHandle);
 }
 
+/*********************************************************************
+ * @fn      		  - SPI_SendDataIT
+ * @brief             - This function saves pTxBuffer and dataLen to global variable which will be used in TX interrupt handling later
+ * @param[in]         - SPI_Handle_t *pSPIHandle
+ * @param[in]         - uint8_t *pTxBuffer
+ * @param[in]         - uint32_t dataLen
+ * @return            - none
+ ********************************************************************/
 void SPI_SendDataIT(SPI_Handle_t *pSPIHandle, uint8_t *pTxBuffer, uint32_t dataLen)
 {
 	SPI_States_e state = pSPIHandle->TxState;
@@ -244,6 +252,14 @@ void SPI_SendDataIT(SPI_Handle_t *pSPIHandle, uint8_t *pTxBuffer, uint32_t dataL
 
 }
 
+/*********************************************************************
+ * @fn      		  - SPI_SendDataIT
+ * @brief             - This function saves pTxBuffer and dataLen to global variable which will be used in RX interrupt handling later
+ * @param[in]         - SPI_Handle_t *pSPIHandle
+ * @param[in]         - uint8_t *pRxBuffer
+ * @param[in]         - uint32_t dataLen
+ * @return            - none
+ ********************************************************************/
 void SPI_ReceiveDataIT(SPI_Handle_t *pSPIHandle,uint8_t *pRxBuffer, uint32_t dataLen)
 {
 	SPI_States_e state = pSPIHandle->RxState;
@@ -268,11 +284,12 @@ void SPI_ReceiveDataIT(SPI_Handle_t *pSPIHandle,uint8_t *pRxBuffer, uint32_t dat
 	}
 
 }
+
 /**
  * 	IRQ configuration and handling
  * */
 /*********************************************************************
- * @fn      		  - GPIO_IRQItConfig
+ * @fn      		  - SPI_IRQItConfig
  * @brief             - This function configures the ISER bit for given IRQ number
  * @param[in]         - uint8_t IRQNumber
  * @param[in]         - uint8_t EnOrDi
@@ -314,7 +331,7 @@ void SPI_IRQ_ITConfig(uint8_t IRQNumber, uint8_t EnOrDi)
 }
 
 /*********************************************************************
- * @fn      		  - GPIO_IRQPriorityConfig
+ * @fn      		  - SPI_IRQPriorityConfig
  * @brief             - This function configures the given priority to given IRQ number
  * @param[in]         - uint8_t IRQNumber
  * @param[in]         - uint32_t IRQPriority
@@ -385,6 +402,13 @@ uint8_t SPI_GetFlagStatus(SPI_Handle_t *pSPIHandle, SPI_Flag_e flagName)
 	return status;
 }
 
+/*********************************************************************
+ * @fn      		  - SPI_TXInterruptHandle
+ * @brief             - This function is used to handle SPI TX interrupt
+ * @param[in]         - SPI_Handle_t *pSPIHandle
+ * @return            - none
+ * @Note              - none
+ ********************************************************************/
 void SPI_TXInterruptHandle(SPI_Handle_t *pSPIHandle)
 {
 	if(pSPIHandle->SPICOnfig.SPI_DFF == SPI_DATASIZE_16_BIT)
@@ -420,6 +444,13 @@ void SPI_TXInterruptHandle(SPI_Handle_t *pSPIHandle)
 
 }
 
+/*********************************************************************
+ * @fn      		  - SPI_RXInterruptHandle
+ * @brief             - This function is used to handle SPI RX interrupt
+ * @param[in]         - SPI_Handle_t *pSPIHandle
+ * @return            - none
+ * @Note              - none
+ ********************************************************************/
 void SPI_RXInterruptHandle(SPI_Handle_t *pSPIHandle)
 {
 	if(pSPIHandle->SPICOnfig.SPI_DFF == SPI_DATASIZE_16_BIT)
